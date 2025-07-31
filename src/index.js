@@ -9,6 +9,8 @@ const {
   titikRouter,
   publikRouter,
   permohonanRouter,
+  beritaRouter,
+  informasiRouter,
 } = require("./routers");
 
 const PORT = process.env.PORT || 7000;
@@ -36,6 +38,8 @@ app.use("/api/user", userRouter);
 app.use("/api/titik", titikRouter);
 app.use("/api/publik", publikRouter);
 app.use("/api/permohonan", permohonanRouter);
+app.use("/api/berita", beritaRouter);
+app.use("/api/informasi", informasiRouter);
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
