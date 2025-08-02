@@ -120,6 +120,7 @@ module.exports = {
     }
   },
   getDetailberita: async (req, res) => {
+    //CEK
     const slug = req.params.slug;
     try {
       const result = await berita.findOne({
