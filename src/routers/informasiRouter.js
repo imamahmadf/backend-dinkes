@@ -62,8 +62,8 @@ router.post("/test-upload", uploader.single("file"), (req, res) => {
   });
 });
 
-router.get("/get", informasiControllers.getInformasi);
 router.get("/get/seed", informasiControllers.getSeed);
+router.get("/get/:id", informasiControllers.getInformasi);
 router.post(
   "/post",
   uploader.single("file"),

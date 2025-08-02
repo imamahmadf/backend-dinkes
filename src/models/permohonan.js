@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+
+      this.hasMany(models.keberatan);
+      this.belongsTo(models.status);
     }
   }
   permohonan.init(

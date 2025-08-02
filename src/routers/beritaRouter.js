@@ -19,4 +19,6 @@ routers.post(
 );
 routers.get("/get/seed", beritaControllers.getSeed);
 routers.get("/list", beritaControllers.getListBerita);
+routers.get("/get/all", beritaControllers.getAllBerita);
+routers.get("/get/detail/:slug", beritaControllers.getDetailberita);
 module.exports = routers;

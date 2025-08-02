@@ -11,6 +11,7 @@ const {
   permohonanRouter,
   beritaRouter,
   informasiRouter,
+  galeriRouter,
 } = require("./routers");
 
 const PORT = process.env.PORT || 7000;
@@ -40,7 +41,7 @@ app.use("/api/publik", publikRouter);
 app.use("/api/permohonan", permohonanRouter);
 app.use("/api/berita", beritaRouter);
 app.use("/api/informasi", informasiRouter);
-
+app.use("/api/galeri", galeriRouter);
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });

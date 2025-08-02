@@ -12,7 +12,13 @@ module.exports = {
     console.log("=== END LOG ===");
 
     const { judul, konten, bidang, tema } = req.body;
-
+    const slugify = (judul) =>
+      judul
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .trim();
     // Validasi input
     if (!judul || !konten) {
       return res.status(400).json({
@@ -35,9 +41,10 @@ module.exports = {
         bidangId: parseInt(bidang),
         foto: fotoPath,
         isi: konten, // konten sudah disanitasi oleh middleware
-        ringkasan: konten.replace(/<[^>]*>/g, "").substring(0, 100), // menghapus tag HTML untuk ringkasan
+        ringkasan: konten.replace(/<[^>]*>/g, "").substring(0, 200), // menghapus tag HTML untuk ringkasan
         penulis: "Admin", // default penulis
         temaBeritaId: parseInt(tema), // default tema berita
+        slug: slugify(judul),
       });
 
       return res.status(200).json({
@@ -72,7 +79,64 @@ module.exports = {
           { model: temaBerita, as: "temaBerita", attributes: ["id", "tema"] },
           { model: bidang, as: "bidang", attributes: ["id", "nama"] },
         ],
-        attributes: ["id", "judul", "ringkasan", "foto", "penulis"],
+        attributes: ["id", "judul", "ringkasan", "foto", "penulis", "slug"],
+        limit: 3,
+      });
+
+      return res.status(200).json({ result });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: err.message });
+    }
+  },
+
+  getAllBerita: async (req, res) => {
+    const page = parseInt(req.query.page) || 0;
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = limit * page;
+    try {
+      const result = await berita.findAll({
+        offset,
+        limit,
+        include: [
+          { model: temaBerita, as: "temaBerita", attributes: ["id", "tema"] },
+          { model: bidang, as: "bidang", attributes: ["id", "nama"] },
+        ],
+        attributes: ["id", "judul", "ringkasan", "foto", "penulis", "slug"],
+      });
+
+      const totalRows = await berita.count({
+        offset,
+        limit,
+      });
+      const totalPage = Math.ceil(totalRows / limit);
+
+      return res
+        .status(200)
+        .json({ result, page, limit, totalRows, totalPage });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: err.message });
+    }
+  },
+  getDetailberita: async (req, res) => {
+    const slug = req.params.slug;
+    try {
+      const result = await berita.findOne({
+        include: [
+          { model: temaBerita, as: "temaBerita", attributes: ["id", "tema"] },
+          { model: bidang, as: "bidang", attributes: ["id", "nama"] },
+        ],
+        attributes: [
+          "id",
+          "judul",
+          "ringkasan",
+          "foto",
+          "penulis",
+          "slug",
+          "isi",
+        ],
+        where: { slug },
       });
 
       return res.status(200).json({ result });
