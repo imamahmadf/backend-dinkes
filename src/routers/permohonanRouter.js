@@ -16,6 +16,6 @@ routers.post(
 routers.get("/get/status", permohonanControllers.cekPermohonan);
 routers.get("/get", permohonanControllers.getPermohonan);
 routers.post("/post/keberatan", permohonanControllers.postKeberatan);
+routers.post("/post/laporan", permohonanControllers.postLaporan);
 
 module.exports = routers;
-  

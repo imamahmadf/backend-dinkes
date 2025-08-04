@@ -1,4 +1,4 @@
-const { permohonan, keberatan, status } = require("../models");
+const { permohonan, keberatan, status, laporan } = require("../models");
 
 const PizZip = require("pizzip");
 const fs = require("fs");
@@ -140,6 +140,27 @@ module.exports = {
         message: "Keberatan berhasil dibuat",
         result,
       });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({
+        message: err.toString(),
+        code: 500,
+      });
+    }
+  },
+
+  postLaporan: async (req, res) => {
+    const { nama, email, subjek, pesan } = req.body;
+    console.log(req.body, "BODYYYY");
+    try {
+      const result = await laporan.create({
+        nama,
+        email,
+        subjek,
+        pesan,
+      });
+
+      return res.status(200).json({ result });
     } catch (err) {
       console.log(err);
       return res.status(500).json({
