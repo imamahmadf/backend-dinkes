@@ -19,9 +19,19 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.WHITELISTED_DOMAIN
-      ? process.env.WHITELISTED_DOMAIN.split(",")
-      : "*",
+    origin: (origin, callback) => {
+      const whitelist = process.env.WHITELISTED_DOMAIN
+        ? process.env.WHITELISTED_DOMAIN.split(",").map((d) => d.trim())
+        : [];
+
+      // Allow if origin is in whitelist or no origin (e.g., Postman)
+      if (!origin || whitelist.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
   })
 );
 
