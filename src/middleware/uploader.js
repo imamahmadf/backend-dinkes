@@ -51,7 +51,7 @@ const fileUploader = ({
     storage: storageConfig,
     fileFilter,
     limits: {
-      fileSize: 10 * 1024 * 1024, // 10MB limit
+      fileSize: 80 * 1024 * 1024, // 10MB limit
     },
   });
 };
