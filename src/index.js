@@ -17,13 +17,6 @@ const {
 const PORT = process.env.PORT || 7000;
 const app = express();
 
-const allowedOrigins = [
-  "https://dinkes.paserkab.go.id",
-  "http://dinkes.paserkab.go.id",
-  "https://www.dinkes.paserkab.go.id",
-  "http://www.dinkes.paserkab.go.id",
-];
-
 app.use(
   cors({
     origin: process.env.WHITELISTED_DOMAIN
